@@ -19,17 +19,16 @@ export default CustomButton
 
 const styles = StyleSheet.create({
     button: {
-        padding: 10,
+        padding: 14,
         backgroundColor: "#1d1d1f",
-        borderRadius: 5,
+        borderRadius: 16,
         marginTop: 10,
-        width: "80%",
+        width: "100%",
     },
     text: {
         color: "#f5f5f7",
         fontWeight: 900,
         fontSize: 16,
         textAlign: 'center',
-        padding: 10,
     }
 })
