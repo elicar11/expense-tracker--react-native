@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { Button, Text } from 'react-native-paper';
+import { Text } from 'react-native-paper';
 
 interface CustomButtonProps {
     title: string;
@@ -10,9 +10,7 @@ interface CustomButtonProps {
 const CustomButton = ({ title, onPress }: CustomButtonProps) => {
     return (
         <TouchableOpacity style={styles.button} onPress={onPress}>
-            <Button >
-                <Text style={styles.text}>{title}</Text>
-            </Button>
+            <Text style={styles.text}>{title}</Text>        
         </TouchableOpacity>
     )
 }
@@ -32,5 +30,6 @@ const styles = StyleSheet.create({
         fontWeight: 900,
         fontSize: 16,
         textAlign: 'center',
+        padding: 10,
     }
 })
