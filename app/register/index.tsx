@@ -2,12 +2,14 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, Pressable } from 'react-native'
 import { Controller, useForm } from "react-hook-form"
 import { Icon, TextInput, HelperText } from 'react-native-paper'
-import { Link, useRouter } from "expo-router"
+import { Link, RelativePathString, useRouter } from "expo-router"
 import CustomButton from '@/components/CustomButton'
 import Title from '@/components/Title'
 import SafeAreaLayoutWrapper from '@/safe-area-layout-wrapper'
+import { registerNew } from '@/services/users'
 
 const RegisterScreen = () => {
+  const [loading, setLoading]= React.useState(false)
   const [passwordVisible, setPasswordVisible] = useState(false)
   const router = useRouter()
 
@@ -23,7 +25,16 @@ const RegisterScreen = () => {
     },
   })
 
-  const onSubmit = (data: any) => console.log(data)
+  const onSubmit = async (data: any) => {
+      setLoading(true)
+      const response = await registerNew(data)
+      setLoading(false)
+      if(response.success){
+        router.push("/login" as RelativePathString)
+      } else {
+        alert(response.message)
+      }
+  }
 
   return (
     <SafeAreaLayoutWrapper>
@@ -124,7 +135,10 @@ const RegisterScreen = () => {
           </View>
         </View>
 
-        <CustomButton title="Register" onPress={handleSubmit(onSubmit)} />
+        <CustomButton
+          title={loading ? "Registering..." : "Register"}
+          onPress={handleSubmit(onSubmit)}
+        />
         <View style={styles.footer}>
             <Text style={styles.text}>Already have an account?{' '}</Text>
             <Link href="/login">

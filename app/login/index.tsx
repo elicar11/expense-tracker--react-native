@@ -2,12 +2,16 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, Pressable } from 'react-native'
 import { Controller, useForm } from "react-hook-form"
 import { Icon, TextInput, HelperText } from 'react-native-paper'
-import { Link, useRouter } from "expo-router"
+import { Link, RelativePathString, useRouter } from "expo-router"
 import CustomButton from '@/components/CustomButton'
 import Title from '@/components/Title'
 import SafeAreaLayoutWrapper from '@/safe-area-layout-wrapper'
+import { loginUser } from '@/services/users'
+import Toast from 'react-native-toast-message'
+
 
 const LoginScreen = () => {
+    const [loading, setLoading] = React.useState(false)
     const [passwordVisible, setPasswordVisible] = useState(false)
     const router = useRouter()
 
@@ -23,7 +27,31 @@ const LoginScreen = () => {
         },
     })
 
-    const onSubmit = (data: any) => console.log(data)
+    const onSubmit = async (data: any) => {
+        try {
+            setLoading(true)
+            const response = await loginUser(data)
+            setLoading(false)
+            if (response.success) {
+                Toast.show({
+                    type: "success",
+                    text1: "Login Successfully",
+                    text2: "You have been logged succesfully"
+                })
+                setTimeout(() => {
+                    router.replace("/user/home" as RelativePathString)
+                }, 1500)
+            } else {
+                throw new Error(response.message || "Login failed")
+            }
+        } catch (error) {
+            Toast.show({
+                type: "error",
+                text1: "Login failed",
+                text2: error instanceof Error ? error.message : "An error occurs during login. Try again!",
+            })
+        }
+    }
 
     return (
         <SafeAreaLayoutWrapper>
@@ -101,7 +129,7 @@ const LoginScreen = () => {
                     </View>
                 </View>
 
-                <CustomButton title="Register" onPress={handleSubmit(onSubmit)} />
+                <CustomButton title={loading ? "Login..." : "Login"} onPress={handleSubmit(onSubmit)} />
                 <View style={styles.footer}>
                     <Text style={styles.text}>Already have an account?{' '}</Text>
                     <Link href="/register">
