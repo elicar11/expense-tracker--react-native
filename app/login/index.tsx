@@ -8,12 +8,14 @@ import Title from '@/components/Title'
 import SafeAreaLayoutWrapper from '@/safe-area-layout-wrapper'
 import { loginUser } from '@/services/users'
 import Toast from 'react-native-toast-message'
+import { useAuthStore } from '@/store/auth-store';
 
 
 const LoginScreen = () => {
     const [loading, setLoading] = React.useState(false)
     const [passwordVisible, setPasswordVisible] = useState(false)
     const router = useRouter()
+    const { setUser } = useAuthStore() 
 
     const {
         control,
@@ -21,7 +23,6 @@ const LoginScreen = () => {
         formState: { errors },
     } = useForm({
         defaultValues: {
-            name: "",
             email: "",
             password: "",
         },
@@ -31,28 +32,32 @@ const LoginScreen = () => {
         try {
             setLoading(true)
             const response = await loginUser(data)
-            setLoading(false)
+            
             if (response.success) {
+                setUser(response.data); 
+
                 Toast.show({
                     type: "success",
                     text1: "Login Successfully",
-                    text2: "You have been logged succesfully"
+                    text2: "Welcome back!"
                 })
+
                 setTimeout(() => {
                     router.replace("/user/home" as RelativePathString)
                 }, 1500)
             } else {
                 throw new Error(response.message || "Login failed")
             }
-        } catch (error) {
+        } catch (error: any) {
             Toast.show({
                 type: "error",
                 text1: "Login failed",
-                text2: error instanceof Error ? error.message : "An error occurs during login. Try again!",
+                text2: error.message,
             })
+        } finally {
+            setLoading(false)
         }
     }
-
     return (
         <SafeAreaLayoutWrapper>
             <View style={styles.container}>

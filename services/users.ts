@@ -42,26 +42,55 @@ export const registerNew = async (payload: Partial<IUser>) => {
     }
 }
 
-
-export const loginUser = async (payload:({
-    email: string;
-    password: string;
-})) => {
+export const loginUser = async (payload: { email: string; password: string }) => {
     try {
-        const { data, error} = await supabaseConfig.auth.signInWithPassword({
+        const { data, error } = await supabaseConfig.auth.signInWithPassword({
             email: payload.email,
             password: payload.password
-        })
+        });
 
-        if (error){
-            throw new Error(error.message)
-        }
-        return{
+        if (error) throw new Error(error.message);
+
+        const { data: profile, error: profileError } = await supabaseConfig
+            .from("user_profile")
+            .select("*")
+            .eq("id", data.user.id)
+            .single();
+
+        if (profileError) throw new Error(profileError.message);
+
+        return {
             success: true,
             message: "User logged successfully",
-            data: data
+            data: profile 
+        };
+    } catch (error: any) {
+        return { success: false, message: error.message };
+    }
+}
+
+export const getCurrentUserSession = async () => {
+    try {
+        const session = await supabaseConfig.auth.getSession()
+        const sessionData = session.data.session
+        if (!sessionData) {
+            return null
+        }
+        const email = sessionData.user.email
+        const { data, error } = await supabaseConfig
+            .from("user_profile")
+            .select("*")
+            .eq("email", email)
+            .single();
+        if (error) {
+            throw new Error(error.message)
         }
     } catch (error) {
-        throw error;
+        return null
     }
+}
+
+export const logoutUser = async () => {
+    const { error } = await supabaseConfig.auth.signOut();
+    if (error) throw error;
 }
