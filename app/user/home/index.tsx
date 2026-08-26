@@ -1,52 +1,71 @@
-import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
 import SafeAreaLayoutWrapper from '@/safe-area-layout-wrapper'
-import { useAuthStore } from '@/store/auth-store'
-import CustomButton from '@/components/CustomButton'
-import { useRouter } from 'expo-router'
+import { BottomNavigation, Icon, useTheme } from 'react-native-paper';
+import HomeTabs from './_components/home-tabs';
+import ProfileTabs from './_components/profile-tabs';
+import { TouchableOpacity, View } from 'react-native';
+import { RelativePathString, useRouter } from 'expo-router';
+
 
 const UserHomepage = () => {
-    const { user, logout } = useAuthStore();
-    const router = useRouter();
+    const router = useRouter()
+    const [index, setIndex] = React.useState(0);
 
-    const handleLogout = async () => {
-        await logout();
-        router.replace("/landing");
-    };
+    const tabs = [
+        { key: 'home', title: 'Home', focusedIcon: 'home', unfocusedIcon: 'home-outline' },
+        { key: 'profile', title: 'Profile', focusedIcon: 'account', unfocusedIcon: 'account-outline' },
+    ]
+
+    const renderScene = BottomNavigation.SceneMap({
+        home: HomeTabs,
+        profile: ProfileTabs
+    });
 
     return (
         <SafeAreaLayoutWrapper>
-            <View style={styles.container}>
-                <Text style={styles.title}>Welcome, {user?.name ?? "User"}</Text>
-                <Text style={styles.subtitle}>Email: {user?.email ?? "Not provided"}</Text>
-                
-                <View style={{ marginTop: 20, width: '100%' }}>
-                    <CustomButton 
-                        title='Logout' 
-                        onPress={handleLogout} 
-                    />
-                </View>
+            <View
+                style={{
+                    position: 'absolute',
+                    bottom: 55,
+                    height: 60,
+                    width: 60,
+                    left: "50%",
+                    backgroundColor: "black",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    transform: [{ translateX: -30 }],
+                    borderRadius: 28,
+                    zIndex: 1,
+                }}
+            >
+                <TouchableOpacity onPress={() => router.push("/user/add-transaction" as RelativePathString)}>
+                    <Icon source={"plus"} size={30} color={"white"} />
+                </TouchableOpacity>
+
             </View>
+
+            <BottomNavigation
+                navigationState={{ index, routes: tabs }}
+                onIndexChange={setIndex}
+                renderScene={renderScene}
+                activeColor="black"
+                inactiveColor="#999"
+                barStyle={{
+                    backgroundColor: "#fff",
+                    height: 70,
+                    borderTopWidth: 1, 
+                    borderTopColor: '#000'
+                }}
+
+                theme={{
+                    colors: {
+                        secondaryContainer: "transparent",
+                    }
+                }}
+                shifting={true}
+            />
         </SafeAreaLayoutWrapper>
     )
 }
-
-const styles = StyleSheet.create({
-    container: { 
-        flex: 1, 
-        justifyContent: "center", 
-        alignItems: "center",
-        padding: 20 
-    },
-    title: {
-        fontSize: 22,
-        fontWeight: 'bold'
-    },
-    subtitle: {
-        fontSize: 16,
-        color: 'gray',
-        marginBottom: 10
-    }
-})
 
 export default UserHomepage

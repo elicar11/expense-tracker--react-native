@@ -7,7 +7,7 @@ const SafeAreaLayoutWrapper = ({ children }: { children: React.ReactNode }) => {
     return (
         <>
             <Toast />
-            <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
                 {children}
             </SafeAreaView>
         </>
