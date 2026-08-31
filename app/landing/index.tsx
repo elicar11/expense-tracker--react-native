@@ -1,4 +1,4 @@
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Image } from 'react-native'
 import { Link, RelativePathString, useRouter } from 'expo-router'
 import { Text, Icon } from 'react-native-paper'
 import React from 'react'
@@ -12,10 +12,11 @@ const LandingScreen = () => {
     <SafeAreaLayoutWrapper>
       <View style={styles.container}>
         <View style={styles.logo}>
-          <View style={{ width: 90, height: 90, borderRadius: 20, backgroundColor: "white", justifyContent: 'center', alignItems: 'center', marginBottom: 20 }}>
-            <Icon source="wallet" size={50} color="#1d1d1f" />
-          </View>
-          <Text style={{ color: "#1d1d1f", fontSize: 40, fontWeight: 900, textAlign: 'center'}}>Expense Tracker</Text>
+          <Image
+            source={require('@/assets/images/SplashScreen.png')}
+            style={{ width: 400, height: 320 }}
+          />
+          <Text style={{ color: "#1d1d1f", fontSize: 40, fontWeight: 900, textAlign: 'center' }}>Expense Tracker</Text>
           <Text style={{ color: "#766363", fontSize: 16, fontWeight: 500, marginTop: 10, textAlign: 'center' }}>Track your expenses with ease</Text>
         </View>
         <View style={styles.button}>
