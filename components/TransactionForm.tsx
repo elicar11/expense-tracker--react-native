@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, Text, StyleSheet, ScrollView } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Icon, TextInput, HelperText, Button } from 'react-native-paper'
 import Title from './Title'
 import { useRouter } from 'expo-router'
@@ -9,11 +9,16 @@ import { DatePickerModal } from 'react-native-paper-dates';
 import { Dropdown } from 'react-native-paper-dropdown';
 import dayjs from 'dayjs'
 import { categories, transactionTypes } from '@/constants'
-import { addTransaction } from '@/services/transactions'
+import { addTransaction, editTransactionById } from '@/services/transactions'
 import { useAuthStore } from '@/store/auth-store'
 import Toast from 'react-native-toast-message'
 
-const TransactionForm = ({ formType }: { formType: "add" | "edit" }) => {
+interface TransactionFormProps {
+    formType: "add" | "edit";
+    initialData?: any; 
+}
+
+const TransactionForm = ({ formType, initialData }: TransactionFormProps) => {
     const router = useRouter()
     const [loading, setLoading] = React.useState(false)
     const [open, setOpen] = React.useState(false);
@@ -27,6 +32,7 @@ const TransactionForm = ({ formType }: { formType: "add" | "edit" }) => {
         control,
         handleSubmit,
         formState: { errors },
+        reset
     } = useForm({
         defaultValues: {
             name: "",
@@ -38,37 +44,72 @@ const TransactionForm = ({ formType }: { formType: "add" | "edit" }) => {
         },
     })
 
+    // Charger les données dans le formulaire si on est en mode "edit"
+    useEffect(() => {
+        if (formType === "edit" && initialData) {
+            reset({
+                name: initialData.name,
+                amount: initialData.amount.toString(),
+                description: initialData.description || "",
+                date: initialData.date ? new Date(initialData.date) : new Date(),
+                type: initialData.type,
+                category: initialData.category,
+            });
+        }
+    }, [initialData, formType]);
+
     const onSubmit = async (data: any) => {
         try {
             setLoading(true)
-            let response = null
+            let response;
+
+            const payload = {
+                user_id: user?.id,
+                name: data.name,
+                amount: parseFloat(data.amount),
+                description: data.description,
+                date: data.date,
+                type: data.type,
+                category: data.category,
+            };
 
             if (formType === "add") {
-                response = await addTransaction({
-                    user_id: user?.id,
-                    name: data.name,
-                    amount: parseFloat(data.amount),
-                    description: data.description,
-                    date: data.date,
-                    type: data.type,
-                    category: data.category,
-                })
+                response = await addTransaction(payload);
+            } else {
+                // Modification : on utilise l'ID de initialData
+                response = await editTransactionById({
+                    transactionId: Number(initialData.id),
+                    payload: payload
+                });
             }
 
             if (response && response.success) {
                 Toast.show({
                     type: "success",
-                    text1: formType === "add" ? "Transaction added successfully" : "Transaction updated successfully",
+                    text1: response.message,
                 })
                 setTimeout(() => router.back(), 1500)
+            } else {
+                throw new Error(response?.message || "Operation failed");
             }
-        } catch (error) {
-            Toast.show({ type: "error", text1: "An error occurred" })
+        } catch (error: any) {
+            Toast.show({
+                type: "error",
+                text1: error.message || "An error occurred"
+            })
         } finally {
             setLoading(false)
         }
     }
 
+    const dropdownTheme = {
+        colors: {
+            onSurface: 'black', 
+            primary: 'black',   
+            outline: 'black',   
+            background: 'white'
+        }
+    };
 
     return (
         <ScrollView style={styles.container}>
@@ -84,7 +125,6 @@ const TransactionForm = ({ formType }: { formType: "add" | "edit" }) => {
                 </View>
 
                 <View style={styles.form}>
-                    {/* NOM */}
                     <View style={styles.inputWrapper}>
                         <Controller
                             control={control}
@@ -100,7 +140,7 @@ const TransactionForm = ({ formType }: { formType: "add" | "edit" }) => {
                                     style={styles.input}
                                     outlineColor="black"
                                     activeOutlineColor="black"
-                                    textColor="black" 
+                                    textColor="black"
                                     left={<TextInput.Icon icon="tag" color="black" />}
                                 />
                             )}
@@ -124,8 +164,8 @@ const TransactionForm = ({ formType }: { formType: "add" | "edit" }) => {
                                     style={styles.input}
                                     outlineColor="black"
                                     activeOutlineColor="black"
-                                    textColor="black" 
-                                    left={<TextInput.Icon icon="cash-multiple" color="black" />}
+                                    textColor="black"
+                                    left={<TextInput.Icon icon="currency-eur" color="black" />}
                                 />
                             )}
                         />
@@ -148,8 +188,7 @@ const TransactionForm = ({ formType }: { formType: "add" | "edit" }) => {
                                     style={[styles.input, { height: 100 }]}
                                     outlineColor="black"
                                     activeOutlineColor="black"
-                                    textColor="black" 
-                                    left={<TextInput.Icon icon="note-text-outline" color="black" />}
+                                    textColor="black"
                                 />
                             )}
                         />
@@ -186,7 +225,6 @@ const TransactionForm = ({ formType }: { formType: "add" | "edit" }) => {
                         />
                     </View>
 
-                    {/* TYPE */}
                     <View style={styles.inputWrapper}>
                         <Controller
                             control={control}
@@ -196,11 +234,12 @@ const TransactionForm = ({ formType }: { formType: "add" | "edit" }) => {
                                 <View style={styles.input}>
                                     <Dropdown
                                         label="Type"
-                                        placeholder="Select Transaction Type"
+                                        placeholder="Select Type"
                                         options={transactionTypes}
                                         value={value}
                                         onSelect={onChange}
-                                        mode='outlined' 
+                                        mode='outlined'
+                                        theme={dropdownTheme}
                                     />
                                 </View>
                             )}
@@ -222,6 +261,7 @@ const TransactionForm = ({ formType }: { formType: "add" | "edit" }) => {
                                         value={value}
                                         onSelect={onChange}
                                         mode='outlined'
+                                        theme={dropdownTheme}
                                     />
                                 </View>
                             )}

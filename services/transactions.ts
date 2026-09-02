@@ -41,34 +41,22 @@ export const editTransactionById = async ({
     payload: Partial<ITransaction>
 }) => {
     try {
-        const { data, error } = await supabaseConfig
+        const { error } = await supabaseConfig
             .from("transaction")
-            .update([
-                {
-                    amount: payload.amount,
-                    type: payload.type,
-                    description: payload.description,
-                    date: payload.date,
-                    category: payload.category,
-                    user_id: payload.user_id,
-                }
-            ])
-            .eq("id", transactionId)
-            .single()
+            .update({
+                name: payload.name,
+                amount: payload.amount,
+                type: payload.type,
+                description: payload.description,
+                date: payload.date,
+                category: payload.category,
+            })
+            .eq("id", transactionId);
 
-        if (error) {
-            throw new Error(error.message)
-        }
-
-        return {
-            success: true,
-            message: "Transactiion updated successfully "
-        }
-    } catch (error) {
-        return {
-            success: false,
-            message: error instanceof Error ? error.message : "An error occured while updating transaction"
-        }
+        if (error) throw new Error(error.message);
+        return { success: true, message: "Updated successfully" };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 };
 
@@ -101,6 +89,7 @@ export const getTransactionByUserId = async (userId: string) => {
             .from("transaction")
             .select("*")
             .eq("user_id", userId)
+            .order('created_at', { ascending: false });
 
         if (error) {
             throw new Error(error.message)
@@ -141,5 +130,37 @@ export const getTransactionById = async (transactionId: number) => {
             success: false,
             message: error instanceof Error ? error.message : "An error occured while retrieving transaction"
         }
+    }
+};
+
+export const getHomeData = async (userId: string) => {
+    try {
+        const { data, error } = await supabaseConfig
+            .from("transaction")
+            .select("*")
+            .eq("user_id", userId)
+            .order('created_at', { ascending: false }); 
+
+        if (error) throw new Error(error.message);
+
+        const transactions = data as ITransaction[];
+
+        const totalIncome = transactions
+            .filter(t => t.type === 'income')
+            .reduce((sum, t) => sum + t.amount, 0);
+
+        const totalExpense = transactions
+            .filter(t => t.type === 'expense')
+            .reduce((sum, t) => sum + t.amount, 0);
+
+        return {
+            success: true,
+            totalIncome,
+            totalExpense,
+            balance: totalIncome - totalExpense,
+            recentTransactions: transactions.slice(0, 5) 
+        };
+    } catch (error: any) {
+        return { success: false, message: error.message };
     }
 };

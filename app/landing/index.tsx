@@ -1,6 +1,6 @@
 import { View, StyleSheet, Image } from 'react-native'
 import { Link, RelativePathString, useRouter } from 'expo-router'
-import { Text, Icon } from 'react-native-paper'
+import { Text } from 'react-native-paper'
 import React from 'react'
 import SafeAreaLayoutWrapper from '@/safe-area-layout-wrapper'
 import CustomButton from '@/components/CustomButton'
@@ -16,7 +16,7 @@ const LandingScreen = () => {
             source={require('@/assets/images/SplashScreen.png')}
             style={{ width: 400, height: 320 }}
           />
-          <Text style={{ color: "#1d1d1f", fontSize: 40, fontWeight: 900, textAlign: 'center' }}>Expense Tracker</Text>
+          <Text style={{ color: "#1d1d1f", fontSize: 50, fontWeight: 900, textAlign: 'center' }}>Xpense</Text>
           <Text style={{ color: "#766363", fontSize: 16, fontWeight: 500, marginTop: 10, textAlign: 'center' }}>Track your expenses with ease</Text>
         </View>
         <View style={styles.button}>
