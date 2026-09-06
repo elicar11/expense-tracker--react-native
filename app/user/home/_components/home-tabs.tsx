@@ -6,6 +6,7 @@ import { useAuthStore } from '@/store/auth-store'
 import { getHomeData } from '@/services/transactions'
 import CardItem from '@/components/CardItem'
 import { ITransaction } from '@/interfaces'
+import { StatusBar } from 'expo-status-bar';
 
 const HomeTabs = () => {
     const { user } = useAuthStore();
@@ -37,7 +38,7 @@ const HomeTabs = () => {
         }, [user?.id])
     );
 
-    if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#4C4DDC" />;
+    if (loading) return <ActivityIndicator style={{ flex: 1 }} color="#c5c5d3" />;
 
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
