@@ -1,43 +1,105 @@
-# Welcome to your Expo app 👋
+# 🪙 Expense Tracker - Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Une application mobile de gestion de finances personnelles moderne, performante et minimaliste. Suivez vos revenus et vos dépenses en temps réel avec une interface élégante en noir et blanc.
 
-## Get started
+![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Expo](https://img.shields.io/badge/expo-1C1E24?style=for-the-badge&logo=expo&logoColor=D04A37)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 
-1. Install dependencies
+## ✨ Fonctionnalités
 
+### 🔐 Authentification
+- Inscription et connexion sécurisées via **Supabase Auth**.
+- Gestion de session persistante avec **Zustand** et **AsyncStorage**.
+- Validation de formulaire robuste avec **React Hook Form**.
+
+### 📊 Tableau de Bord (Home)
+- Calcul automatique de la **Balance Totale**.
+- Visualisation rapide du total des **Revenus** et des **Dépenses**.
+- Affichage des 5 dernières transactions récentes.
+
+### 💸 Gestion des Transactions
+- Liste complète des transactions triées par date (récentes en haut).
+- **CRUD Complet** : Ajouter, Modifier et Supprimer des transactions.
+- Catégorisation intelligente avec icônes dynamiques.
+- Sélecteur de date intégré (`react-native-paper-dates`).
+
+### 👤 Profil Utilisateur
+- Personnalisation du profil (Nom, Email, Mot de passe).
+- Menu de navigation intuitif.
+- Déconnexion sécurisée.
+
+## 🎨 Design & UI
+- **Thème** : Minimaliste "Black & White" (Noir & Blanc).
+- **Composants** : Basés sur `React Native Paper` pour une expérience native fluide.
+- **Feedback** : Notifications instantanées via `react-native-toast-message`.
+
+## 🛠️ Stack Technique
+
+- **Framework** : Expo (React Native)
+- **Navigation** : Expo Router (File-based routing)
+- **Backend-as-a-Service** : Supabase (Auth, PostgreSQL, RLS)
+- **State Management** : Zustand
+- **Formulaires** : React Hook Form + Zod
+- **Dates** : Day.js
+- **UI Kit** : React Native Paper
+
+## 🚀 Installation et Lancement
+
+1. **Cloner le projet**
+   ```bash
+   git clone https://github.com/votre-username/expense-tracker.git
+   cd expense-tracker
+   ```
+
+2. **Installer les dépendances**
    ```bash
    npm install
    ```
 
-2. Start the app
+3. **Configuration de l'environnement**
+   Créez un fichier `.env` à la racine et ajoutez vos clés Supabase :
+   ```env
+   EXPO_PUBLIC_SUPABASE_URL=https://votre-projet.supabase.co
+   EXPO_PUBLIC_SUPABASE_ANON_KEY=votre-cle-anonyme
+   ```
 
+4. **Lancer l'application**
    ```bash
    npx expo start
    ```
 
-In the output, you'll find options to open the app in a
+## 🏗️ Structure du Projet
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+```text
+├── app/                  # Routes et écrans (Expo Router)
+│   ├── (auth)/           # Login, Register
+│   └── user/             # Home, Transactions, Profile, Edit
+├── components/           # Composants UI réutilisables (CardItem, Button...)
+├── services/             # Logique API et appels Supabase
+├── store/                # État global (Auth Store avec Zustand)
+├── utils/                # Configuration Supabase et helpers
+├── interfaces/           # Types TypeScript (ITransaction, IUser)
+└── constants/            # Catégories, types et styles globaux
+```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## 🔒 Configuration de la Base de Données
 
+Le projet nécessite deux tables principales dans Supabase :
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+1. **user_profile** : Liée à `auth.users` via l'ID.
+   - `id` (uuid, primary key)
+   - `name` (text)
+   - `email` (text)
 
-## Learn more
+2. **transaction** :
+   - `id` (bigint, primary key)
+   - `user_id` (uuid, foreign key)
+   - `name` (text)
+   - `amount` (numeric)
+   - `type` (text: 'income' | 'expense')
+   - `category` (text)
+   - `date` (timestamp)
+   - `created_at` (timestamp)
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
