@@ -4,7 +4,7 @@ import SafeAreaLayoutWrapper from '@/safe-area-layout-wrapper'
 import { useAuthStore } from '@/store/auth-store'
 import { useRouter } from 'expo-router'
 import { Icon, Divider } from 'react-native-paper'
-import ProfileMenuItem  from '@/components/ProfileMenuItem'
+import ProfileMenuItem from '@/components/ProfileMenuItem'
 
 const ProfileTabs = () => {
     const { user, logout } = useAuthStore();
@@ -13,72 +13,54 @@ const ProfileTabs = () => {
     const handleLogout = () => {
         Alert.alert("Logout", "Are you sure you want to exit?", [
             { text: "Cancel", style: "cancel" },
-            { 
-                text: "Logout", 
-                style: "destructive", 
+            {
+                text: "Logout",
+                style: "destructive",
                 onPress: async () => {
                     await logout();
                     router.replace("/landing");
-                } 
+                }
             }
         ]);
     };
 
     return (
         <SafeAreaLayoutWrapper>
-            <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>        
+            <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
                 <View style={styles.header}>
                     <View style={styles.avatar}>
                         <Text style={styles.avatarText}>{user?.name?.charAt(0).toUpperCase()}</Text>
                     </View>
                     <Text style={styles.userName}>{user?.name ?? "User"}</Text>
                     <Text style={styles.userEmail}>{user?.email ?? "Not provided"}</Text>
-                    
-                    <TouchableOpacity style={styles.editBadge} onPress={() => router.push("/user/profile/edit" as any)}>
-                        <Text style={styles.editBadgeText}>Edit Profile</Text>
-                    </TouchableOpacity>
                 </View>
 
                 <View style={styles.menuSection}>
-                    <Text style={styles.sectionTitle}>Account Settings</Text>
-                    
-                    <ProfileMenuItem 
-                        icon="account-outline" 
-                        title="Personal Information" 
-                        onPress={() => console.log('Personal Info')} 
-                    />
-                    <ProfileMenuItem 
-                        icon="history" 
-                        title="Transaction History" 
-                        onPress={() => router.push("/user/transaction" as any)} 
-                    />
-                    <ProfileMenuItem 
-                        icon="shield-check-outline" 
-                        title="Security & Privacy" 
-                        onPress={() => console.log('Security')} 
-                    />
-                </View>
 
-                <View style={styles.menuSection}>
-                    <Text style={styles.sectionTitle}>Support</Text>
-                    <ProfileMenuItem 
-                        icon="help-circle-outline" 
-                        title="Help Center" 
-                        onPress={() => console.log('Help')} 
+                    <ProfileMenuItem
+                        icon="account-outline"
+                        title="Edit Profile"
+                        onPress={() => router.push("/user/profile/edit" as any)}
                     />
-                    <ProfileMenuItem 
-                        icon="information-outline" 
-                        title="About App" 
-                        onPress={() => console.log('About')} 
+                    <ProfileMenuItem
+                        icon="history"
+                        title="Transaction History"
+                        onPress={() => router.push("/user/transaction" as any)}
+                    />
+
+                    <ProfileMenuItem
+                        icon="information-outline"
+                        title="About App"
+                        onPress={() => router.push("/user/profile/about" as any)}
                     />
                 </View>
 
                 <View style={styles.logoutSection}>
-                    <ProfileMenuItem 
-                        icon="logout" 
-                        title="Logout" 
-                        onPress={handleLogout} 
-                        color="#e60d0d" 
+                    <ProfileMenuItem
+                        icon="logout"
+                        title="Logout"
+                        onPress={handleLogout}
+                        color="#e60d0d"
                     />
                 </View>
 
@@ -94,7 +76,7 @@ const styles = StyleSheet.create({
     },
     header: {
         alignItems: 'center',
-        paddingVertical: 40,
+        paddingVertical: 140,
         backgroundColor: 'white',
         borderBottomLeftRadius: 30,
         borderBottomRightRadius: 30,
@@ -137,7 +119,7 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         color: 'black',
     },
-        menuSection: {
+    menuSection: {
         paddingHorizontal: 20,
         marginBottom: 20,
     },

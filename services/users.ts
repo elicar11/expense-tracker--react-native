@@ -42,6 +42,39 @@ export const registerNew = async (payload: Partial<IUser>) => {
     }
 }
 
+export const updateFullProfile = async (userId: string, payload: { name?: string, email?: string, password?: string }) => {
+    try {
+        if (payload.email || payload.password) {
+            const updateData: any = {};
+            if (payload.email) updateData.email = payload.email;
+            if (payload.password) updateData.password = payload.password;
+
+            const { error: authError } = await supabaseConfig.auth.updateUser(updateData);
+            if (authError) throw authError;
+        }
+
+        const { error: profileError } = await supabaseConfig
+            .from("user_profile")
+            .update({ 
+                name: payload.name,
+                email: payload.email 
+            })
+            .eq("id", userId);
+
+        if (profileError) throw profileError;
+
+        return { 
+            success: true, 
+            message: "Profile updated successfully!" 
+        };
+    } catch (error: any) {
+        return { 
+            success: false, 
+            message: error.message || "An error occurred during update" 
+        };
+    }
+}
+
 export const loginUser = async (payload: { email: string; password: string }) => {
     try {
         const { data, error } = await supabaseConfig.auth.signInWithPassword({
@@ -62,7 +95,7 @@ export const loginUser = async (payload: { email: string; password: string }) =>
         return {
             success: true,
             message: "User logged successfully",
-            data: profile 
+            data: profile
         };
     } catch (error: any) {
         return { success: false, message: error.message };
