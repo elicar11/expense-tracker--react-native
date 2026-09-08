@@ -7,35 +7,35 @@ Une application mobile de gestion de finances personnelles moderne, performante 
 ![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 
-## ✨ Fonctionnalités
+##  Fonctionnalités
 
-### 🔐 Authentification
+### - Authentification
 - Inscription et connexion sécurisées via **Supabase Auth**.
 - Gestion de session persistante avec **Zustand** et **AsyncStorage**.
 - Validation de formulaire robuste avec **React Hook Form**.
 
-### 📊 Tableau de Bord (Home)
+### - Tableau de Bord (Home)
 - Calcul automatique de la **Balance Totale**.
 - Visualisation rapide du total des **Revenus** et des **Dépenses**.
 - Affichage des 5 dernières transactions récentes.
 
-### 💸 Gestion des Transactions
+### - Gestion des Transactions
 - Liste complète des transactions triées par date (récentes en haut).
 - **CRUD Complet** : Ajouter, Modifier et Supprimer des transactions.
 - Catégorisation intelligente avec icônes dynamiques.
 - Sélecteur de date intégré (`react-native-paper-dates`).
 
-### 👤 Profil Utilisateur
+### - Profil Utilisateur
 - Personnalisation du profil (Nom, Email, Mot de passe).
 - Menu de navigation intuitif.
 - Déconnexion sécurisée.
 
-## 🎨 Design & UI
+## - Design & UI
 - **Thème** : Minimaliste "Black & White" (Noir & Blanc).
 - **Composants** : Basés sur `React Native Paper` pour une expérience native fluide.
 - **Feedback** : Notifications instantanées via `react-native-toast-message`.
 
-## 🛠️ Stack Technique
+## - Stack Technique
 
 - **Framework** : Expo (React Native)
 - **Navigation** : Expo Router (File-based routing)
@@ -45,7 +45,7 @@ Une application mobile de gestion de finances personnelles moderne, performante 
 - **Dates** : Day.js
 - **UI Kit** : React Native Paper
 
-## 🚀 Installation et Lancement
+## - Installation et Lancement
 
 1. **Cloner le projet**
    ```bash
@@ -70,7 +70,7 @@ Une application mobile de gestion de finances personnelles moderne, performante 
    npx expo start
    ```
 
-## 🏗️ Structure du Projet
+## - Structure du Projet
 
 ```text
 ├── app/                  # Routes et écrans (Expo Router)
@@ -84,7 +84,7 @@ Une application mobile de gestion de finances personnelles moderne, performante 
 └── constants/            # Catégories, types et styles globaux
 ```
 
-## 🔒 Configuration de la Base de Données
+## - Configuration de la Base de Données
 
 Le projet nécessite deux tables principales dans Supabase :
 
