@@ -74,7 +74,7 @@ Une application mobile de gestion de finances personnelles moderne, performante 
 
 ```text
 ├── app/                  # Routes et écrans (Expo Router): Login, Register, Home, Transactions, Profile
-├── app/                  # Logo et Photo
+├── assets/                  # Logo et Photo
 ├── components/           # Composants UI réutilisables (CardItem, Button...)
 ├── services/             # Logique API et appels Supabase
 ├── store/                # État global (Auth Store avec Zustand)
