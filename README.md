@@ -58,14 +58,14 @@ Une application mobile de gestion de finances personnelles moderne, performante 
    npm install
    ```
 
-3. **Configuration de l'environnement**
+<!-- 3. **Configuration de l'environnement**
    Créez un fichier `.env` à la racine et ajoutez vos clés Supabase :
    ```env
-   EXPO_PUBLIC_SUPABASE_URL=https://votre-projet.supabase.co
-   EXPO_PUBLIC_SUPABASE_ANON_KEY=votre-cle-anonyme
-   ```
+   EXPO_PUBLIC_SUPABASE_URL=https://ckbjjbnaxeujjeswciuc.supabase.co
+   EXPO_PUBLIC_SUPABASE_KEY=sb_publishable_JymJHnaFWRdmy_syrNAzqQ_LIAOZZiB
+   ``` -->
 
-4. **Lancer l'application**
+3. **Lancer l'application**
    ```bash
    npx expo start
    ```
@@ -73,9 +73,8 @@ Une application mobile de gestion de finances personnelles moderne, performante 
 ## - Structure du Projet
 
 ```text
-├── app/                  # Routes et écrans (Expo Router)
-│   ├── (auth)/           # Login, Register
-│   └── user/             # Home, Transactions, Profile, Edit
+├── app/                  # Routes et écrans (Expo Router): Login, Register, Home, Transactions, Profile
+├── app/                  # Logo et Photo
 ├── components/           # Composants UI réutilisables (CardItem, Button...)
 ├── services/             # Logique API et appels Supabase
 ├── store/                # État global (Auth Store avec Zustand)
