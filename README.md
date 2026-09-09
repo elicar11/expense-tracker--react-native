@@ -49,7 +49,7 @@ Une application mobile de gestion de finances personnelles moderne, performante 
 
 1. **Cloner le projet**
    ```bash
-   git clone https://github.com/votre-username/expense-tracker.git
+   git clone https://github.com/elicar11/expense-tracker.git
    cd expense-tracker
    ```
 
